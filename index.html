@@ -49,6 +49,80 @@
     display: block;
   }
 
+  .topbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin-left: auto;
+  }
+
+  .topbar-nav a,
+  .topbar-nav button {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-dark);
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+    font-family: 'Archivo', sans-serif;
+  }
+  .topbar-nav a:hover,
+  .topbar-nav button:hover { color: var(--pink); }
+
+  .topbar-nav .nav-cta {
+    background: var(--pink);
+    color: var(--white);
+    padding: 9px 18px;
+    border-radius: 6px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    transition: background 0.2s;
+  }
+  .topbar-nav .nav-cta:hover { background: var(--pink-dark); color: var(--white); }
+
+  @media (max-width: 860px) {
+    .topbar-nav { display: none; }
+  }
+
+  /* ─── VIDEOS SECTION ─── */
+  .videos-wrap {
+    padding: 80px 48px;
+    background: var(--gray-light);
+    border-top: 1px solid var(--border);
+  }
+  .videos-inner { max-width: 1080px; margin: 0 auto; }
+  .videos-inner .section-title { margin-bottom: 40px; }
+
+  .videos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .video-card {
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+  }
+
+  .video-card iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  @media (max-width: 860px) {
+    .videos-grid { grid-template-columns: 1fr; }
+    .videos-wrap { padding: 60px 24px; }
+  }
+
   /* ─── HERO ─── */
   .hero {
     padding: 88px 48px 96px;
@@ -1173,10 +1247,17 @@
   <div class="abiv-logo">
     <img src="imagens/logo abiv.webp" alt="ABIV - Associação Brasileira da Indústria do Vestuário">
   </div>
+  <div class="topbar-nav">
+    <a href="#hero">O benefício</a>
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#planos">Planos</a>
+    <a href="#videos">Vídeos</a>
+    <button class="nav-cta" onclick="openPopup()">Fale conosco</button>
+  </div>
 </nav>
 
 <!-- HERO -->
-<section style="overflow:hidden;">
+<section id="hero" style="overflow:hidden;">
   <div class="hero">
     <div class="hero-content">
 
@@ -1214,7 +1295,7 @@
 </div>
 
 <!-- FEATURES SECTION -->
-<div class="features-wrap">
+<div class="features-wrap" id="como-funciona">
   <div class="features-inner">
     <div class="section-label">Cursos feitos para a realidade da loja</div>
     <div class="section-title features-title">10 minutos por dia que ajudam a sua loja a <em style="font-style:normal;color:var(--pink)">lucrar</em> mais no fim do mês</div>
@@ -1294,7 +1375,7 @@
         <li><span class="course-check">✓</span> Curso Gestão de Loja</li>
         <li><span class="course-check">✓</span> Curso Gestão de Pessoa</li>
       </ul>
-      <button class="btn-outline" onclick="openPopup()" style="margin-top:24px;">Ver aulas exemplo ↗</button>
+      <button class="btn-outline" onclick="openCatalog()" style="margin-top:24px;">Ver aulas exemplo ↗</button>
     </div>
   </div>
 </div>
@@ -1398,6 +1479,25 @@
     <div class="stat-card">
       <div class="stat-num">100%</div>
       <div class="stat-label">digital · no celular · sem precisar parar a operação</div>
+    </div>
+  </div>
+</div>
+
+<!-- VIDEOS SECTION -->
+<div class="videos-wrap" id="videos">
+  <div class="videos-inner">
+    <div class="section-label">Conteúdo exclusivo</div>
+    <div class="section-title">Aprenda com quem<br>entende do varejo</div>
+    <div class="videos-grid">
+      <div class="video-card">
+        <iframe src="https://www.youtube.com/embed/7Gof1z43i90?rel=0&modestbranding=1" title="Vídeo 1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div class="video-card">
+        <iframe src="https://www.youtube.com/embed/UONupdGgkNM?rel=0&modestbranding=1" title="Vídeo 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div class="video-card">
+        <iframe src="https://www.youtube.com/embed/fzLwYA6Jqks?rel=0&modestbranding=1" title="Vídeo 3" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
     </div>
   </div>
 </div>
@@ -1527,7 +1627,30 @@
     }
   }
 
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closePopup(); closeCatalog(); }
+  });
+
+  function openCatalog() {
+    document.getElementById('catalog-popup').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeCatalog() {
+    document.getElementById('catalog-popup').classList.remove('open');
+    document.getElementById('catalog-iframe').src = document.getElementById('catalog-iframe').src;
+    document.body.style.overflow = '';
+  }
 </script>
+
+<!-- CATALOG POPUP -->
+<div class="popup-overlay" id="catalog-popup" onclick="if(event.target===this)closeCatalog()">
+  <div style="background:#fff; border-radius:16px; width:90vw; max-width:1000px; height:80vh; position:relative; overflow:hidden; display:flex; flex-direction:column;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid #E8E8E8; flex-shrink:0;">
+      <span style="font-size:13px; font-weight:700; color:#666;">Catálogo de Cursos · Elite do Varejo</span>
+      <button onclick="closeCatalog()" style="background:none; border:none; font-size:20px; color:#666; cursor:pointer; line-height:1;">✕</button>
+    </div>
+    <iframe id="catalog-iframe" src="https://www.elitedovarejo.com.br/catalogo-de-cursos.html" style="flex:1; border:none; width:100%;" allowfullscreen></iframe>
+  </div>
+</div>
 </body>
 </html>
