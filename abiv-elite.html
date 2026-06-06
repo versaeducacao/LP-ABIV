@@ -1473,6 +1473,9 @@
 </div>
 
 <script>
+  const SUPA_URL = 'https://pexenzdlbfgpaunsugek.supabase.co';
+  const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBleGVuemRsYmZncGF1bnN1Z2VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1OTQ1MjQsImV4cCI6MjA5NjE3MDUyNH0.92F_Um7tVt17qpggms-Fo_BHBG15vS-YfCWdfWe4v2Q';
+
   function openPopup() {
     document.getElementById('popup').classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -1484,17 +1487,46 @@
   function handleOverlayClick(e) {
     if (e.target === document.getElementById('popup')) closePopup();
   }
-  function submitForm() {
-    const n = document.getElementById('f-name').value.trim();
-    const p = document.getElementById('f-phone').value.trim();
-    const c = document.getElementById('f-company').value.trim();
-    if (!n || !p || !c) {
+
+  async function submitForm() {
+    const nome     = document.getElementById('f-name').value.trim();
+    const whatsapp = document.getElementById('f-phone').value.trim();
+    const loja     = document.getElementById('f-company').value.trim();
+    const assunto  = document.getElementById('f-subject').value;
+    const mensagem = document.getElementById('f-message').value.trim();
+
+    if (!nome || !whatsapp || !loja) {
       alert('Por favor, preencha nome, WhatsApp e nome da loja.');
       return;
     }
-    document.getElementById('form-body').style.display = 'none';
-    document.getElementById('form-success').classList.add('show');
+
+    const btn = document.querySelector('.form-submit');
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    try {
+      const res = await fetch(`${SUPA_URL}/rest/v1/cadastros_leads`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPA_KEY,
+          'Authorization': `Bearer ${SUPA_KEY}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ nome, whatsapp, loja, assunto, mensagem, origem: 'ABIV' })
+      });
+
+      if (!res.ok) throw new Error('Erro ao enviar');
+
+      document.getElementById('form-body').style.display = 'none';
+      document.getElementById('form-success').classList.add('show');
+    } catch (err) {
+      alert('Erro ao enviar. Tente novamente.');
+      btn.disabled = false;
+      btn.textContent = 'Enviar →';
+    }
   }
+
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
 </script>
 </body>
